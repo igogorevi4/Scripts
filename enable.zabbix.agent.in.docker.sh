@@ -18,4 +18,4 @@ if [[ $(ps aux | grep zabbix | grep agent | grep grep -v) ]]
 fi
 
 # clean lib to decrease container size
-docker exec $CONTAINER rm -rf /var/lib/apt/lists/* && rm -rf /usr/{{lib,share}/locale,share/{man,doc,info,gnome/help,cracklib,il8n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive}
+# docker exec $CONTAINER rm -rf /var/lib/apt/lists/* && rm -rf /usr/{{lib,share}/locale,share/{man,doc,info,gnome/help,cracklib,il8n},{lib,lib64}/gconv,bin/localedef,sbin/build-locale-archive}
