@@ -108,11 +108,8 @@ echo "IP Filter Rules"
 #Office IP
 $IPTABLES -A INPUT -p ALL -s 10.10.10.10 -j ACCEPT
 
-#Office, Poland
-
 #Zabbix
 $IPTABLES -A INPUT -p ALL -s 127.0.0.1 -j ACCEPT
-#Zabbix ViSPA
 
 iptables-save
 
