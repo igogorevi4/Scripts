@@ -106,7 +106,7 @@ echo "IP Filter Rules"
 #
 
 #Office IP
-$IPTABLES -A INPUT -p ALL -s 10.10.10.10 -j ACCEPT
+$IPTABLES -A INPUT -p ALL -s 10.10.10.10 -j ACCEPT  -m comment --comment "Allow connection from office's IP"
 
 #Zabbix
 $IPTABLES -A INPUT -p ALL -s 127.0.0.1 -j ACCEPT
@@ -117,3 +117,5 @@ iptables-save
 #F="/etc/network/iptables.save"
 #test -f "$F" && /sbin/iptables-restore < $F
 iptables-save > /etc/network/iptables.save
+#iptables-save > /etc/iptables.up.rules
+#echo "pre-up iptables-restore < /etc/iptables.up.rules" >> /etc/network/interfaces

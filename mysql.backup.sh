@@ -13,7 +13,7 @@ PASSWORD=YOUR_PASSWORD_HERE
 mysql -e 'STOP SLAVE;' -u$USERNAME -p$PASSWORD -h$SERVER
 
 ### create backup
-#mysqldump --all-databases -u$USERNAME -p$PASSWORD -h$SERVER | gzip > $DIR/$PROJECT-$PART-`date +\%Y\%m\%d`.sql.gz
+#mysqldump --all-databases -u$USERNAME -p$PASSWORD -h$SERVER | gzip -f > $DIR/$PROJECT-$PART-`date +\%Y\%m\%d`.sql.gz
 mysqldump --all-databases -u$USERNAME -p$PASSWORD -h$SERVER > $DIR/$PROJECT-$PART-`date +\%Y\%m\%d`.sql.gz
 
 ### start replication
@@ -28,3 +28,6 @@ mysql -e 'START SLAVE;' -u$USERNAME -p$PASSWORD -h$SERVER
 cd $DIR
 rm $PROJECT-$PART-latest.sql > /dev/null 2>&1 # delete previous symlink
 ln -s $(ls -rt | grep $PART | tail -n1) $PROJECT-$PART-latest.sql
+
+#Delete legacy backups
+find ${DIR} -mtime +7 -exec rm -rv '{}' \;
