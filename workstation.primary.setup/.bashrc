@@ -119,7 +119,4 @@ fi
 
 # yap aliases
 
-#alias sya='_sya(){ ssh -i /home/yaros/.ssh/id_rsa yap@$1; }; _sya'
-alias sya='_sya(){ ssh -i /home/yaros/.ssh/id_rsa.new yap@$1; }; _sya'
-alias syap='_syap(){ ssh -i /home/yaros/.ssh/id_rsa yapozdnyakov@$1; }; _syap'
-alias cdd='_cdd(){ cd /mnt/c/Users/Yapozdnyakov/Dropbox/work/IT\ Services/; }; _cdd'
+alias cdd='_cdd(){ cd /mnt/c/Users/yap/Dropbox/work/; }; _cdd'
