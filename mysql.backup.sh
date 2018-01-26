@@ -10,7 +10,7 @@ USERNAME=REPLICATION_USER_HERE
 PASSWORD=YOUR_PASSWORD_HERE
 
 #### stop replication
-mysql -e 'STOP SLAVE;' -u$USERNAME -p$PASSWORD -h$SERVER
+#mysql -e 'STOP SLAVE;' -u$USERNAME -p$PASSWORD -h$SERVER
 
 ### create backup
 #mysqldump --all-databases -u$USERNAME -p$PASSWORD -h$SERVER | gzip -f > $DIR/$PROJECT-$PART-`date +\%Y\%m\%d`.sql.gz
@@ -18,7 +18,7 @@ mysql -e 'STOP SLAVE;' -u$USERNAME -p$PASSWORD -h$SERVER
 mysqldump --all-databases -u$USERNAME -p$PASSWORD -h$SERVER --skip-lock-tables --single-transaction --flush-logs --hex-blob --master-data=2 | gzip -f > $DIR/$PROJECT-$PART-`date +\%Y\%m\%d`.sql.gz
 
 ### start replication
-mysql -e 'START SLAVE;' -u$USERNAME -p$PASSWORD -h$SERVER
+#mysql -e 'START SLAVE;' -u$USERNAME -p$PASSWORD -h$SERVER
 
 #create gzip archive
 #cd $DIR
