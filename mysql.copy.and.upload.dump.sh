@@ -4,9 +4,9 @@
 # Run this script by user which has permissions to remote located backups
 # Run this script: /bin/bash mysql.copy.and.upload.dump.sh &> /tmp/copy.and.upload.mysql.dumps.log
 
-BACKUPSERVER='149.202.209.56'
+BACKUPSERVER='127.0.0.1'
 USER=$(whoami)
-DBLIST='csgl-trades csgl-bets d2l-trades d2l-bets'
+DBLIST='mydatabase'
 #LOG=/tmp/copy.and.upload.mysql.dumps.log
 DBUSER=$(whoami)
 DBPASSWORD=$(cat /home/$(whoami)/.mysql_credentials)#chmod 700 to this file /home/$(whoami)/.mysql_credentials
@@ -19,7 +19,7 @@ echo "==== Copying dumps ($(date)) ===="
 
 for i in $DBLIST;
 do
-  REQUESTEDFILE=$(ssh $USER@$BACKUPSERVER "readlink -f /home/lounges/$(echo $i | cut -f1 -d \-)/$i-latest.sql")
+  REQUESTEDFILE=$(ssh $USER@$BACKUPSERVER "readlink -f /home/$USER/$(echo $i | cut -f1 -d \-)/$i-latest.sql")
   scp $USER@$BACKUPSERVER:$REQUESTEDFILE /home/$USER/
 done
 
@@ -33,34 +33,17 @@ do
   /bin/gzip -d $i #/home/$USER/$($(basename $i)|cut -f1 -d\.).sql
 done
 
-#| cs_bets|cslounge
-#| cs_memory  |
-#| cs_trades  |cslounge
-#| d2_bets|bets
-#| d2_trades  |dota2lounge
 
 #Rename database in dumpfile and upload to MySQL
 echo "==== Replacing DB's names ($(date)) ===="
 
 cd /home/$USER/
-sed -i 's/bets/d2_bets/g' d2l-bets*.sql
-sed -i 's/dota2lounge/d2_trades/g' d2l-trades*.sql
-sed -i 's/cslounge/cs_bets/g' csgl-bets*.sql
-sed -i 's/cslounge/cs_trades/g' csgl-trades*.sql
+sed -i 's/foo/bar/g' mydatabase*.sql
 
 echo "==== Uploading dumps to mysql ($(date)) ===="
 
-#D2L-Bets
-mysql -u$DBUSER -p$DBPASSWORD -D d2_bets -o < d2l-bets*.sql
-
-#D2L-Trades
-mysql -u$DBUSER -p$DBPASSWORD -D d2_trades -o < d2l-trades*.sql
-
-#CSGO-Bets
-mysql -u$DBUSER -p$DBPASSWORD -D cs_bets -o < csgl-bets*.sql
-
-#CSGO-Trades
-mysql -u$DBUSER -p$DBPASSWORD -D cs_trades -o < csgl-trades*.sql
+#Upload
+mysql -u$DBUSER -p$DBPASSWORD -D mydatabase -o < mydatabase*.sql
 
 #Clean up the mess
 echo "==== Removing temporary files ($(date)) ===="
