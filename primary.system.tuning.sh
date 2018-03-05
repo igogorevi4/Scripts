@@ -1,13 +1,13 @@
 #!/bin/bash
-# настройки HDD если памяти >=2 GB
-echo 'vm.swappiness=10' >> /etc/sysctl.conf #установите 1 если установка идет на VPS
+# set HDD if memory size >=2 GB
+echo 'vm.swappiness=10' >> /etc/sysctl.conf #set 1 if it's on VPS
 echo 'vm.vfs_cache_pressure=1000' >> /etc/sysctl.conf
 echo 'vm.dirty_background_ratio = 10' >> /etc/sysctl.conf
 echo 'vm.dirty_ratio = 10' >> /etc/sysctl.conf
 echo 'vm.laptop_mode = 5' >> /etc/sysctl.conf
-sudo sync #чтобы применились изменения
+sudo sync #to commit changes
 echo 3 > /proc/sys/vm/drop_caches
-# настройка сети, лимиты
+# network, limits
 echo 'net.core.netdev_max_backlog = 10000' >> /etc/sysctl.conf
 echo 'net.core.somaxconn=65535' >> /etc/sysctl.conf
 echo 'net.ipv4.tcp_syncookies=1' >> /etc/sysctl.conf
@@ -26,7 +26,7 @@ echo 'net.core.rmem_default = 8388608' >> /etc/sysctl.conf
 echo 'net.core.wmem_default = 4194394' >> /etc/sysctl.conf
 echo 'net.ipv4.tcp_rmem = 4096 8388608 16777216' >> /etc/sysctl.conf
 echo 'net.ipv4.tcp_wmem = 4096 4194394 16777216' >> /etc/sysctl.conf
-#настройка памяти
+#memory set
 page_size=`getconf PAGE_SIZE`
 phys_pages=`getconf _PHYS_PAGES`
 shmall=`expr $phys_pages / 2`
