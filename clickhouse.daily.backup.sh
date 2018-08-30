@@ -2,8 +2,8 @@
 
 CLICKHOUSE=$(/usr/bin/clickhouse-server)
 DATE=$(/bin/date +\%Y\%m\%d\%H)
-DATADIR='/opt/clickhouse/data/'
-BACKUPDIR='/opt/clickhouse/backups'
+DATADIR=$(/opt/clickhouse/data/)
+BACKUPDIR=$(/opt/clickhouse/backups)
 HOST=$(host -t axfr $(hostname -i | awk '{print $NF}') | grep PTR | awk '{print $NF}' | grep ch)
 PORT=$(grep tcp_port /etc/clickhouse-server/config.xml | awk '{gsub(/[^0-9. ]/,"")}1')
 BASES=$($CLICKHOUSE --client --port $PORT --host $HOST --query "show databases;" | grep -vE "default|system")
