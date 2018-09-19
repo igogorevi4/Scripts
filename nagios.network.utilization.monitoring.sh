@@ -1,36 +1,46 @@
 #!/bin/bash
 
-warn=$1
-crit=$2
+# Nagios thresholds
+while getopts "w:c:" opt
+do
+	case $opt in
+		w) warn=$OPTARG;;
+		c) crit=$OPTARG;;
+	esac
+done
 
-interface="eth1.3180"
+# Get network interfaces with real traffic
+interfaces=$(ifconfig | grep -E "inet 172.|inet 10." -B1 | grep mtu | cut -f1 -d\:)
 
-i0=$(netstat -i | grep $interface)
-rx0=$(ifconfig $interface | grep packets | grep RX | awk '{ print $5 }')
-tx0=$(ifconfig $interface | grep packets | grep TX | awk '{ print $5 }')
+for interface in $interfaces; do 
+	if $(ifconfig $interface | grep packets | grep -q "(0.0 B)")
+	then
+		# Do nothing
+		:
+	else
+		rx0=$(ifconfig $interface | grep packets | grep RX | awk '{ print $5 }')
+		tx0=$(ifconfig $interface | grep packets | grep TX | awk '{ print $5 }')
 
-sleep 1
+		sleep 1
 
-i1=$(netstat -i | grep $interface)
-rx1=$(ifconfig $interface | grep packets | grep RX | awk '{ print $5 }')
-tx1=$(ifconfig $interface | grep packets | grep TX | awk '{ print $5 }')
+		rx1=$(ifconfig $interface | grep packets | grep RX | awk '{ print $5 }')
+		tx1=$(ifconfig $interface | grep packets | grep TX | awk '{ print $5 }')
 
-let "rx=rx1-rx0"
-let "tx=tx1-tx0"
+		let "rx=rx1-rx0"
+		let "tx=tx1-tx0"
 
-status="$rx $tx"
+		status="$rx $tx - $interface"
 
-if (( $warn <= $rx )) || (( $warn <= $tx ))
-then
-  if (( $crit <= $rx )) || (( $crit <= $tx ))
-  then
-    echo "CRITICAL - $status"
-    exit 2
-  else
-    echo "WARNING - $status"
-    exit 1
-  fi
-else
-  echo "OK - $status"
-  exit 0
-fi
+		if (( $warn <= $rx )) || (( $warn <= $tx ))
+		then
+		  if (( $crit <= $rx )) || (( $crit <= $tx ))
+		  then
+		    echo "CRITICAL - $status"
+		  else
+		    echo "WARNING - $status"
+		  fi
+		else
+		  echo "OK - $status"
+		fi
+	fi
+done
