@@ -9,6 +9,11 @@ do
 	esac
 done
 
+# Defaul values
+rxmax=0
+txmax=0
+interfacemax=zero
+
 # Get network interfaces with real traffic
 interfaces=$(ifconfig | grep -E "inet 172.|inet 10." -B1 | grep mtu | cut -f1 -d\:)
 
@@ -28,19 +33,25 @@ for interface in $interfaces; do
 
 		let "rx=rx1-rx0"
 		let "tx=tx1-tx0"
-
-		status="$rx $tx - $interface"
-
-		if (( $warn <= $rx )) || (( $warn <= $tx ))
-		then
-		  if (( $crit <= $rx )) || (( $crit <= $tx ))
-		  then
-		    echo "CRITICAL - $status"
-		  else
-		    echo "WARNING - $status"
-		  fi
-		else
-		  echo "OK - $status"
-		fi
+	fi
+	if (( $rx > $rxmax )) || (( $tx > $txmax ))
+	then
+		rxmax=$rx
+		txmax=$tx
+		interfacemax=$interface
 	fi
 done
+
+status="$rxmax $txmax - $interfacemax"
+
+if (( $warn <= $rxmax )) || (( $warn <= $txmax ))
+then
+	if (( $crit <= $rxmax )) || (( $crit <= $txmax ))
+	then
+		echo "CRITICAL - $status"
+	else
+		echo "WARNING - $status"
+	fi
+else
+	echo "OK - $status"
+fi
