@@ -8,8 +8,3 @@
 # chmod 700 /home/$(whoami)/.ssh/id_rsa
 # chown $(whoami):$(whoami) /home/$(whoami)/.ssh/id_rsa
 
-# install:
-#   xshell
-#   slack
-#   google chrome + set us default
-#   
