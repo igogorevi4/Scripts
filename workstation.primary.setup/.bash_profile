@@ -27,3 +27,8 @@ alias k='kubectl'
 alias kgp='kubectl get pod -n'
 alias klog='kubectl logs -f -n'
 #alias ps5=`ps aux | awk '{print $6/1024 " MB\t\t" $11}' | sort -rn | head -n5`
+# git 
+alias gb='git branch'
+alias gc='git checkout'
+alias gagc='git add . && git commit -m'
+alias gs='git status -s'
